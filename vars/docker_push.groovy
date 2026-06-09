@@ -1,16 +1,13 @@
-def call(String credentials, String imageName, String imageTag = "latest") {
-
-    withCredentials([
-        usernamePassword(
-            credentialsId: credentials,
-            usernameVariable: 'DOCKER_USERNAME',
-            passwordVariable: 'DOCKER_PASSWORD'
-        )
-    ]) {
-
-        sh """
-            echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
-            docker push ${imageName}:${imageTag}
-        """
-    }
+def call(String credId, String imageName){
+  withCredentials([usernamePassword(
+                    credentialsId:"${credId}",
+                    passwordVariable: "dockerHubPass",
+                    usernameVariable: "dockerHubUser"
+                )]){
+                
+                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                sh "docker image tag ${imageName} ${env.dockerHubUser}/${imageName}"
+                sh "docker push ${env.dockerHubUser}/${imageName}:latest"
+            
+                }  
 }
