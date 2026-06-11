@@ -1,9 +1,4 @@
-def call(String imageName, String imageTag = "latest") {
-    echo "Building image ${imageName}:${imageTag}"
-
-    sh """
-        docker build \
-        -t ${imageName}:${imageTag} \
-        .
-    """
+// Define function
+def call(String ProjectName, String ImageTag, String DockerHubUser){
+  sh "docker build -t ${dockerHubCreds}/${ProjectName}:${ImageTag} ."
 }
