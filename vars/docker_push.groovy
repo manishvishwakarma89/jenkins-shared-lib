@@ -5,7 +5,7 @@ def call(String imageName, String tag, String dockerHubUser){
         passwordVariable: 'PASS'
     )]){
         sh """
-            docker login -u ${USER} -p ${PASS}
+            echo ${PASS} | docker login -u ${USER} --password-stdin
             docker tag ${imageName}:${tag} ${dockerHubUser}/${imageName}:${tag}
             docker push ${dockerHubUser}/${imageName}:${tag}
         """
